@@ -43,7 +43,7 @@ case "$1" in
         TMP="$(mktemp -d)"
         WORK="$TMP/work"
 
-        check_new "$NEW_FILE_LIST" "$CHECKSUM_FILE" > "$TMP/new"
+        grep -x -v -F -f <(cat "$CHECKSUM_FILE" | select_filenames) <(find * -type f) > "$TMP/new"
         check_updated "$NEW_FILE_LIST" "$CHECKSUM_FILE" > "$TMP/updated"
         check_deleted "$CHECKSUM_FILE" > "$TMP/deleted"
 
