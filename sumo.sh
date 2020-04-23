@@ -103,8 +103,13 @@ if [ "$1" != "new" ]; then
     if [ -z "$ROOT" ]; then
         find_repository_root
     fi
-    cd "$(cat "${ROOT}/root")" || die 3 "Could not change directory to root"
-    CHECKSUM_FILE="$(readlink -f "${ROOT}/checksums")"
+    root_file="${ROOT}/root"
+    [ -f "$root_file" ] || die 3 "This repository does not seem to have local files"
+    cd "$(cat "$root_file")" || die 3 "Could not change to root directory"
+    id_file="${ROOT}/id"
+    [ -f "$id_file" ] || die 3 "This repository does not seem to have an identity"
+    ID="$(cat "$id_file")"
+    CHECKSUM_FILE="${ROOT}/remotes/${ID}/checksums"
 fi
 
 case "$1" in
@@ -115,7 +120,6 @@ case "$1" in
         touch "$3/remotes/$2/checksums"
         echo "$2" > "$3/id"
         echo "${FILE_PATH}" > "$3/root"
-        ln -s  "remotes/$2/checksums" "$3/checksums"
         ln -s "$(readlink -f "$3")" "${FILE_PATH}.sumo"
         ;;
     "full")

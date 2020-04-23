@@ -21,7 +21,6 @@ load test_helper
 
 @test "creates a new repository" {
     # Repository gets created and asserted in setup
-    [ -h "${REPO}/checksums" ]
     [ -d "${REPO}/remotes" ]
     [ -d "${REPO}/remotes/batrepo" ]
     assert_file_empty ../repo/remotes/batrepo/checksums
@@ -47,13 +46,12 @@ A bar
 A baz
 A foo
 EOF
-    [ -h "${REPO}/checksums" ]
 
-    run wc -l < "$REPO/checksums"
+    run wc -l < "$CHECKSUMS"
     [ "$output" -eq 3 ]
 
     b2sum --tag bar baz foo > reference
-    assert_files_equal reference "${REPO}/checksums"
+    assert_files_equal reference "${CHECKSUMS}"
 }
 
 @test "detects removed files" {
@@ -87,7 +85,7 @@ EOF
 
 @test "selects filenames from checksum file" {
     bash $SUMO full
-    run bash $SUMO select-filenames < "${REPO}/checksums"
+    run bash $SUMO select-filenames < "${CHECKSUMS}"
     assert_output_equals <<EOF
 bar
 baz
@@ -121,7 +119,7 @@ EOF
     [ "$status" -eq 0 ]
     [ "$output" = "A new" ]
     rehash foo bar baz new > reference
-    assert_files_equal "${REPO}/checksums" reference
+    assert_files_equal "${CHECKSUMS}" reference
 }
 
 @test "updates updated files" {
@@ -133,7 +131,7 @@ EOF
     [ "$output" = "U foo" ]
     [ "${lines[0]}" = "U foo" ]
     rehash $FILES > reference
-    assert_files_equal "${REPO}/checksums" reference
+    assert_files_equal "${CHECKSUMS}" reference
 }
 
 @test "updates deleted files" {
@@ -146,5 +144,19 @@ EOF
     assert_success
     [ "$output" = "D foo" ]
     rehash bar baz > reference
-    assert_files_equal "${REPO}/checksums" reference
+    assert_files_equal "${CHECKSUMS}" reference
+}
+
+@test "errors when the repository does not have local files" {
+    rm "${REPO}/root"
+    run bash $SUMO check
+    [ "$status" -eq 3 ]
+    [ "$output" = "This repository does not seem to have local files" ]
+}
+
+@test "errors when repository does not have an ID" {
+    rm "${REPO}/id"
+    run bash $SUMO check
+    [ "$status" -eq 3 ]
+    [ "$output" = "This repository does not seem to have an identity" ]
 }

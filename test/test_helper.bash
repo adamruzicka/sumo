@@ -19,6 +19,7 @@ init_repo() {
     done
     run bash $SUMO new batrepo "$REPO" "$SRC"
     assert_success
+    CHECKSUMS="${REPO}/remotes/batrepo/checksums"
     cd "$SRC"
 }
 
