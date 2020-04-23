@@ -22,7 +22,7 @@ setup() {
 }
 
 teardown() {
-    cd "$PWD"
+    cd "$OLD_DIR"
     rm -rf "$TEST_DIR"
 }
 
@@ -99,7 +99,13 @@ teardown() {
 
 @test "updates updated files" {
     bash $SUMO full
+    rm foo
     echo new > foo
+    echo "===== b2sum" >&3
+    cat .b2sum >&3
+    rehash $FILES > .reference
+    echo "===== reference" >&3
+    cat .reference >&3
     run bash $SUMO update
     [ "$status" -eq 0 ]
     [ "${lines[0]}" = "U foo" ]
