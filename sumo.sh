@@ -13,7 +13,7 @@ function newer_files() {
 }
 
 function check_updated() {
-    grep -x -F -f "$1" "$2" | select_filenames
+    grep -F -f "$1" "$2" | select_filenames
 }
 
 function check_new() {
@@ -50,7 +50,7 @@ case "$1" in
         cp "$CHECKSUM_FILE" "$TMP/work.new"
 
         checksum < "$TMP/new" | tee -a "$WORK.new" | select_filenames | prefix A
-        grep -x -v -F -f "$TMP/updated" "$WORK.new" > "$WORK.updated"
+        grep -v -F -f "$TMP/updated" "$WORK.new" > "$WORK.updated"
         checksum < "$TMP/updated" | tee -a "$WORK.updated" | select_filenames | prefix U
         grep -F -f "$TMP/deleted" "$WORK.updated" | select_filenames | prefix D
         grep -v -F -f "$TMP/deleted" "$WORK.updated" | sort -k 2 > "$CHECKSUM_FILE"
