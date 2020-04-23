@@ -18,3 +18,11 @@ jobs:
         uses: actions/checkout@v1
       - name: Test
         run: bats -r test
+  shellcheck:
+    name: shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v1
+      - name: Test
+        run: shellcheck sumo.sh
