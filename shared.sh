@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 function die() {
     echo "$2" >&2
     cleanup

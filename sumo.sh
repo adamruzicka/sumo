@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 source "$(dirname "$0")/shared.sh"
 
@@ -66,7 +66,7 @@ do
         -h | --help)   usage;;
         -c | --checksum-command) CHECKSUM_COMMAND="$2" ; shift 2 ;;
         -j | --jobs)   JOBS="$2"   ; shift 2 ;;
-        -r | --root)   ROOT="$2"; shift 2 ;;
+        -r | --root)   export ROOT="$2"; shift 2 ;;
         # -- means the end of the arguments; drop this, and break out of the while loop
         --) shift; break ;;
         # If invalid options were passed, then getopt should have reported an error,

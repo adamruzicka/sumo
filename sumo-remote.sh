@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 source "$(dirname "$0")/shared.sh"
 
@@ -48,9 +48,11 @@ init_tmpdir
 
 function rsync_transfer() {
     local src_remote="$1"
-    local src_path="$(safe_load_path "$2")"
+    local src_path
+    src_path="$(safe_load_path "$2")"
     local dst_remote="$3"
-    local dst_path="$(safe_load_path "$4")"
+    local dst_path
+    dst_path="$(safe_load_path "$4")"
 
     comm -2 -3 "${ROOT}/remotes/${src_remote}/checksums" "${ROOT}/remotes/${dst_remote}/checksums" > "$TEST_TEMP_DIR/transferred"
     rsync -Prhv $DRY_RUN --files-from <(select_filenames < "$TEST_TEMP_DIR/transferred") "$src_path" "$dst_path"
