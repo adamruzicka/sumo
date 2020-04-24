@@ -52,10 +52,10 @@ function rsync_transfer() {
     local dst_remote="$3"
     local dst_path="$(safe_load_path "$4")"
 
-    comm -2 -3 "${ROOT}/remotes/${src_remote}/checksums" "${ROOT}/remotes/${dst_remote}/checksums" > "$TMPDIR/transferred"
-    rsync -Prhv $DRY_RUN --files-from <(select_filenames < "$TMPDIR/transferred") "$src_path" "$dst_path"
+    comm -2 -3 "${ROOT}/remotes/${src_remote}/checksums" "${ROOT}/remotes/${dst_remote}/checksums" > "$TEST_TEMP_DIR/transferred"
+    rsync -Prhv $DRY_RUN --files-from <(select_filenames < "$TEST_TEMP_DIR/transferred") "$src_path" "$dst_path"
 
-    cat "${ROOT}/remotes/${dst_remote}/checksums" "$TMPDIR/transferred" > "$TMPDIR/wip"
+    cat "${ROOT}/remotes/${dst_remote}/checksums" "$TEST_TEMP_DIR/transferred" > "$TEST_TEMP_DIR/wip"
     commit "${ROOT}/remotes/${dst_remote}/checksums"
 }
 

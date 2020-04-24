@@ -31,7 +31,6 @@ setup() {
 
 teardown() {
     cd "$OLD_DIR"
-    rm -rf "$TEST_DIR"
 }
 
 rehash() {

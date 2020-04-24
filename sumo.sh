@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env bash
 
 source "$(dirname "$0")/shared.sh"
 
