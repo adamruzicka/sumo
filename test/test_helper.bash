@@ -1,6 +1,7 @@
 prepare() {
     OLD_DIR="$PWD"
     SUMO="${BATS_TEST_DIRNAME}/../sumo.sh"
+    SUMO_REMOTE="${BATS_TEST_DIRNAME}/../sumo-remote.sh"
     TEST_DIR="${BATS_TMPDIR}/test-${BATS_TEST_NUMBER}"
     FILES="foo baz bar"
     rm -rf "$TEST_DIR"
