@@ -5,11 +5,12 @@ function die() {
 }
 
 function init_tmpdir() {
-    TMPDIR="$(mktemp -d)"
+    TEST_TEMP_DIR="$(mktemp -d)"
 }
 
+
 function cleanup() {
-    [ -d "$TMPDIR" ] && rm -rf "$TMPDIR"
+    [ -d "$TEST_TEMP_DIR" ] && rm -rf "$TEST_TEMP_DIR"
 }
 
 function find_repository_root() {
@@ -61,5 +62,5 @@ function commit() {
     else
         local target="$1"
     fi
-    sort -k 2 < "$TMPDIR/wip" > "$target"
+    sort -k 2 < "$TEST_TEMP_DIR/wip" > "$target"
 }

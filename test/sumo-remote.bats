@@ -13,10 +13,9 @@ init_repo() {
 }
 
 @test "adds a remote" {
-    run bash $SUMO new a a/repo a/files
+    bash $SUMO new a a/repo a/files
     cd a/files
-    run bash $SUMO_REMOTE add b "$(readlink -f "${TEST_DIR}/b/files")"
-    assert_success
+    bash $SUMO_REMOTE add b "$(readlink -f "${TEST_DIR}/b/files")"
     [ -d .sumo/remotes/b ]
     [ -f .sumo/remotes/b/checksums ]
     [ -f .sumo/remotes/b/url ]
@@ -25,17 +24,15 @@ init_repo() {
 }
 
 @test "removes a remote" {
-    run bash $SUMO new a a/repo a/files
+    bash $SUMO new a a/repo a/files
     cd a/files
-    run bash $SUMO_REMOTE add b "$(readlink -f "${TEST_DIR}/b/files")"
-    assert_success
-    run bash $SUMO_REMOTE del b
-    assert_success
+    bash $SUMO_REMOTE add b "$(readlink -f "${TEST_DIR}/b/files")"
+    bash $SUMO_REMOTE del b
     [ ! -d .sumo/remotes/b ]
 }
 
 @test "refuses to remove itself" {
-    run bash $SUMO new a a/repo a/files
+    bash $SUMO new a a/repo a/files
     cd a/files
     run bash $SUMO_REMOTE del a
     [ "$status" -eq 5 ]
@@ -43,8 +40,8 @@ init_repo() {
 }
 
 @test "pushes files to remote repository" {
-    run bash $SUMO new a a/repo a/files
-    bash $SUMO_REMOTE -r "${TEST_DIR}/a/repo" add b "$(readlink -f "${TEST_DIR}/b/files")"
+    bash $SUMO new a a/repo a/files
+    bash $SUMO_REMOTE -r "${TEST_DIR}/a/repo" add b "$(readlink -f "${TEST_DIR}/b/files")/"
     echo foo > a/files/foo
     bash $SUMO -r "${TEST_DIR}/a/repo" full
     run bash $SUMO_REMOTE -r "${TEST_DIR}/a/repo" push b
@@ -77,7 +74,7 @@ init_repo() {
     bash $SUMO_REMOTE -r "${TEST_DIR}/a/repo" add b "$(readlink -f "${TEST_DIR}/b/files")"
     echo foo > a/files/foo
     bash $SUMO -r "${TEST_DIR}/a/repo" full
-    run $SUMO_REMOTE -r "${TEST_DIR}/a/repo" local-only b
+    run bash $SUMO_REMOTE -r "${TEST_DIR}/a/repo" local-only b
     assert_success
     [ "$output" = "foo" ]
 }
@@ -89,7 +86,7 @@ init_repo() {
     
     echo foo > b/files/foo
     bash $SUMO -r "${TEST_DIR}/b/repo" full
-    run $SUMO_REMOTE -r "${TEST_DIR}/a/repo" remote-only b
+    run bash $SUMO_REMOTE -r "${TEST_DIR}/a/repo" remote-only b
     assert_success
     [ "$output" = "foo" ]
 }
@@ -100,11 +97,11 @@ init_repo() {
     bash $SUMO_REMOTE -r "${TEST_DIR}/a/repo" add b "$(readlink -f "${TEST_DIR}/b/files")"
     echo foo > b/files/foo
     bash $SUMO -r "${TEST_DIR}/b/repo" full
-    run $SUMO_REMOTE -r "${TEST_DIR}/a/repo" common b
+    run bash $SUMO_REMOTE -r "${TEST_DIR}/a/repo" common b
     assert_success
     [ "$output" = "" ]
 
     bash $SUMO_REMOTE -r "${TEST_DIR}/a/repo" pull b
-    run $SUMO_REMOTE -r "${TEST_DIR}/a/repo" common b
+    run bash $SUMO_REMOTE -r "${TEST_DIR}/a/repo" common b
     [ "$output" = "foo" ]
 }
