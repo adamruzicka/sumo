@@ -10,7 +10,7 @@ function checksum() {
 }
 
 function newer_files() {
-    find ./* -type f -newer "$1" | strip_dot_slash
+    find ./* -type f -newermt "$(cat "$UPDATE_TIMESTAMP_FILE")" | strip_dot_slash
 }
 
 function check_updated() {
@@ -27,6 +27,10 @@ function check_deleted() {
 
 function select_filenames() {
     grep -P -o --line-buffered '\(.*\)' | sed --unbuffered 's/^(\(.*\))$/\1/'
+}
+
+function record_timestamp() {
+    date -Ins
 }
 
 usage() {
@@ -87,12 +91,14 @@ case "$1" in
         FILE_PATH="$(readlink -f "${4%/}")/"
         mkdir -p "$3/remotes/$2"
         touch "$3/remotes/$2/checksums"
+	record_timestamp > "$3/remotes/$2/last_update"
         echo "$2" > "$3/id"
         echo "${FILE_PATH}" > "$3/root"
         ln -s "$(readlink -f "$3")" "${FILE_PATH}.sumo"
         ;;
     "full")
         find ./* -type f | strip_dot_slash | checksum | tee >(sort -k 2 > "$CHECKSUM_FILE") | select_filenames | prefix A
+	record_timestamp > "$UPDATE_TIMESTAMP_FILE"
         ;;
     "update")
         NEW_FILE_LIST="$(mktemp)"
@@ -112,6 +118,7 @@ case "$1" in
         checksum < "$TMP/updated" | tee -a "$WORK.updated" | select_filenames | prefix U
         grep -F -f "$TMP/deleted" "$WORK.updated" | select_filenames | prefix D
         grep -v -F -f "$TMP/deleted" "$WORK.updated" | sort -k 2 > "$CHECKSUM_FILE"
+	record_timestamp > "$UPDATE_TIMESTAMP_FILE"
 
         rm -r "$TMP"
         rm "$NEW_FILE_LIST"

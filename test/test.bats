@@ -26,6 +26,7 @@ load test_helper
     assert_file_empty ../repo/remotes/batrepo/checksums
     assert_file_contains batrepo ../repo/id
     assert_file_contains "${SRC}/" ../repo/root
+    [ -f ../repo/remotes/batrepo/last_update ]
 }
 
 @test "finds repository root" {
@@ -102,6 +103,8 @@ EOF
 }
 
 @test "verifies known files" {
+    run cat .sumo/remotes/batrepo/last_update
+    last_update="$output"
     bash $SUMO full
     run bash $SUMO verify
     assert_success
@@ -110,6 +113,7 @@ bar: OK
 baz: OK
 foo: OK
 EOF
+    [ "$output" != "$last_update" ]
 }
 
 @test "updates added files" {
