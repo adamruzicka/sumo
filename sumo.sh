@@ -91,7 +91,7 @@ case "$1" in
         FILE_PATH="$(readlink -f "${4%/}")/"
         mkdir -p "$3/remotes/$2"
         touch "$3/remotes/$2/checksums"
-	record_timestamp > "$3/remotes/$2/last_update"
+        echo 0 > "$3/remotes/$2/last_update"
         echo "$2" > "$3/id"
         echo "${FILE_PATH}" > "$3/root"
         ln -s "$(readlink -f "$3")" "${FILE_PATH}.sumo"
