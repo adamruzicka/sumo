@@ -25,4 +25,4 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v1
       - name: Test
-        run: shellcheck shared.sh sumo.sh sumo-remote.sh
+        run: shellcheck -e SC1090 shared.sh sumo.sh sumo-remote.sh
