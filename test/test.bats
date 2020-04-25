@@ -79,6 +79,7 @@ EOF
 @test "lists updated files" {
     run bash $SUMO full
     assert_success
+    sleep 0.05
     echo something > foo
     run bash $SUMO check
     assert_success
@@ -119,6 +120,7 @@ EOF
 
 @test "updates added files" {
     bash $SUMO full
+    sleep 0.05
     echo new > new
     run bash $SUMO update
     [ "$status" -eq 0 ]
@@ -129,6 +131,7 @@ EOF
 
 @test "updates updated files" {
     bash $SUMO full
+    sleep 0.05
     rm foo
     echo new > foo
     run bash $SUMO update
@@ -141,6 +144,7 @@ EOF
 
 @test "updates deleted files" {
     bash $SUMO full
+    sleep 0.05
     rm foo
     run bash $SUMO check
     assert_success
