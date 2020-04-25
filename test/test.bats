@@ -27,6 +27,7 @@ load test_helper
     assert_file_contains batrepo ../repo/id
     assert_file_contains "${SRC}/" ../repo/root
     [ -f ../repo/remotes/batrepo/last_update ]
+    assert_file_contains 0 ../repo/remotes/batrepo/last_update
 }
 
 @test "finds repository root" {
