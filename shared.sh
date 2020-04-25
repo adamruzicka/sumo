@@ -37,6 +37,7 @@ function set_defaults() {
     [ -f "$id_file" ] || die 3 "This repository does not seem to have an identity"
     ID="$(cat "$id_file")"
     CHECKSUM_FILE="${ROOT}/remotes/${ID}/checksums"
+    export UPDATE_TIMESTAMP_FILE="${ROOT}/remotes/${ID}/last_update"
 }
 
 function safe_load_path() {
