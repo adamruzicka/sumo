@@ -60,7 +60,7 @@ function rsync_transfer() {
     comm -2 -3 "${ROOT}/remotes/${src_remote}/checksums" "${ROOT}/remotes/${dst_remote}/checksums" > "$TEST_TEMP_DIR/transferred"
     rsync -Prhv $DRY_RUN --files-from <(select_filenames < "$TEST_TEMP_DIR/transferred") "$src_path" "$dst_path"
 
-    if [ -n "$DRY_RUN" ]; then
+    if [ -z "$DRY_RUN" ]; then
         cat "${ROOT}/remotes/${dst_remote}/checksums" "$TEST_TEMP_DIR/transferred" > "$TEST_TEMP_DIR/wip"
         commit "${ROOT}/remotes/${dst_remote}/checksums"
     fi
