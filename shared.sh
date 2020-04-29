@@ -65,5 +65,5 @@ function commit() {
     else
         local target="$1"
     fi
-    sort -k 2 < "$TEST_TEMP_DIR/wip" > "$target"
+    sort -t= -k 1 < "$TEST_TEMP_DIR/wip" > "$target"
 }

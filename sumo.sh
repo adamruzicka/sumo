@@ -97,7 +97,7 @@ case "$1" in
         ln -s "$(readlink -f "$3")" "${FILE_PATH}.sumo"
         ;;
     "full")
-        find ./* -type f | strip_dot_slash | checksum | tee >(sort -k 2 > "$CHECKSUM_FILE") | select_filenames | prefix A
+        find ./* -type f | strip_dot_slash | checksum | tee >(sort -t= -k 1 > "$CHECKSUM_FILE") | select_filenames | prefix A
 	record_timestamp > "$UPDATE_TIMESTAMP_FILE"
         ;;
     "update")
@@ -117,7 +117,7 @@ case "$1" in
         grep -v -F -f "$TMP/updated" "$WORK.new" > "$WORK.updated"
         checksum < "$TMP/updated" | tee -a "$WORK.updated" | select_filenames | prefix U
         grep -F -f "$TMP/deleted" "$WORK.updated" | select_filenames | prefix D
-        grep -v -F -f "$TMP/deleted" "$WORK.updated" | sort -k 2 > "$CHECKSUM_FILE"
+        grep -v -F -f "$TMP/deleted" "$WORK.updated" | sort -t= -k 1 > "$CHECKSUM_FILE"
 	record_timestamp > "$UPDATE_TIMESTAMP_FILE"
 
         rm -r "$TMP"
@@ -128,7 +128,7 @@ case "$1" in
         find ./* -type f | strip_dot_slash > "$TMPDIR/new"
         grep -x -v -F -f <(select_filenames < "$CHECKSUM_FILE") "$TMPDIR/new" | checksum | tee "$TMPDIR/added" | select_filenames | prefix A
         cp "$CHECKSUM_FILE" "$TMPDIR/old"
-        cat "$TMPDIR/old" "$TMPDIR/added" | sort -k 2 > "$CHECKSUM_FILE"
+        cat "$TMPDIR/old" "$TMPDIR/added" | sort -t= -k 1 > "$CHECKSUM_FILE"
         rm -r "$TMPDIR"
         ;;
     "check")
