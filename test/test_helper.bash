@@ -34,5 +34,5 @@ teardown() {
 }
 
 rehash() {
-    b2sum --tag $* | sort -k 2
+    b2sum --tag $* | sort -t= -k 1
 }
