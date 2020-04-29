@@ -1,0 +1,28 @@
+name: "CI"
+on:
+  push:
+   branches:
+     - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup BATS
+        run: sudo npm install -g bats
+      - name: Check out code
+        uses: actions/checkout@v1
+      - name: Test
+        run: bats -r test
+  shellcheck:
+    name: shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v1
+      - name: Test
+        run: shellcheck -e SC1090 shared.sh sumo.sh sumo-remote.sh
